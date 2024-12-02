@@ -1,0 +1,25 @@
+lines: read.lines relative "input" 
+
+results: fold .seed:[[][]] lines [acc, line] [
+    nums: to [:integer] split.by:"   " line
+    acc\0: acc\0 ++ nums\0
+    acc\1: acc\1 ++ nums\1
+    acc
+]
+
+list1: sort results\0
+list2: sort results\1
+
+P1: fold .seed:0 couple list1 list2 [acc, nums] [
+    acc + abs nums\0 - nums\1
+]
+
+counts: tally list2
+
+P2: fold .seed:0 list1 [acc, num] [
+    switch key? counts num -> acc + num * counts\[num] 
+                           -> acc
+]
+
+print P1
+print P2
