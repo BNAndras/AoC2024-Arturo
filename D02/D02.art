@@ -1,0 +1,33 @@
+lines: read.lines relative "input" 
+ 
+reports: to [:block[:integer]] lines 
+ 
+satisfiesDescending?: $[report] [ 
+    and? sorted?.descending report 
+         every?.with:'i chop report 'x -> in? x - report\[i + 1] 1..3 
+] 
+ 
+satisfiesAscending?: $[report] [ 
+    satisfiesDescending? reverse report 
+] 
+ 
+P1: fold .seed:0 reports [acc, report] [ 
+    when [ 
+        satisfiesDescending? report -> acc + 1 
+        satisfiesAscending? report -> acc + 1 
+        true -> acc 
+    ] 
+] 
+ 
+print P1
+
+P2: fold.seed:0 reports [acc, report] [ 
+    when [ 
+        satisfiesDescending? report -> acc + 1 
+        satisfiesAscending? report -> acc + 1 
+        some? permutate.by:(size report) - 1 report 'r -> or? satisfiesAscending? r satisfiesDescending? r -> acc + 1
+        true -> acc
+    ]
+] 
+
+print P2 ; TODO result is too high
