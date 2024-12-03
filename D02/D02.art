@@ -11,23 +11,15 @@ satisfiesAscending?: $[report] [
     satisfiesDescending? reverse report 
 ] 
  
-P1: fold .seed:0 reports [acc, report] [ 
-    when [ 
-        satisfiesDescending? report -> acc + 1 
-        satisfiesAscending? report -> acc + 1 
-        true -> acc 
-    ] 
-] 
+P1: enumerate reports 'report -> or? satisfiesDescending? report
+                                     satisfiesAscending? report
  
 print P1
 
-P2: fold.seed:0 reports [acc, report] [ 
-    when [ 
-        satisfiesDescending? report -> acc + 1 
-        satisfiesAscending? report -> acc + 1 
-        some? permutate.by:(size report) - 1 report 'r -> or? satisfiesAscending? r satisfiesDescending? r -> acc + 1
-        true -> acc
-    ]
-] 
-
-print P2 ; TODO result is too high
+P2: enumerate reports 'report -> any? @[
+    satisfiesDescending? report
+    satisfiesAscending? report
+    some?.with:'i report 'x -> or? satisfiesDescending? remove.index report i
+                                   satisfiesAscending? remove.index report i
+]
+print P2 ; getting closer to right answer
