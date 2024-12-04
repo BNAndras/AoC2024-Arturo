@@ -1,0 +1,7 @@
+data: join read.lines relative "input"
+P1products: map match.capture data {/mul\((\d+),(\d+)\)/} 'm -> product to [:integer] m
+print sum P1products
+
+cleaned: replace data {/don't\(\).*?(do\(\)|$)/} ""
+P2products: map match.capture cleaned {/mul\((\d+),(\d+)\)/} 'm -> product to [:integer] m
+print sum P2products
